@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ajax calc</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .container {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 3rem;
+    }
+    .calculator, .table-container {
+      width: 90vw;
+      max-width: 320px;
+      height: 90vh;
+      max-height: 520px;
+      background-color: #000;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+    .display {
+      width: 100%;
+      height: 20%;
+      background-color: #333;
+      color: #fff;
+      font-size: 2.5rem;
+      text-align: right;
+      padding: 20px;
+      box-sizing: border-box;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      flex-grow: 1;
+    }
+    .button {
+      width: 100%;
+      height: 100%;
+      background-color: #666;
+      color: #fff;
+      font-size: 1.5rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      outline: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .button.operator {
+      background-color: #f90;
+    }
+    .button.zero {
+      grid-column: span 2;
+    }
+    .table-container {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="calculator">
+      <div class="display" id="display">0</div>
+      <div class="buttons">
+        <button class="button" onclick="clearDisplay()">C</button>
+        <button class="button" onclick="appendOperator('/')">÷</button>
+        <button class="button" onclick="appendOperator('*')">×</button>
+        <button class="button" onclick="appendOperator('-')">−</button>
+        <button class="button" onclick="appendNumber(7)">7</button>
+        <button class="button" onclick="appendNumber(8)">8</button>
+        <button class="button" onclick="appendNumber(9)">9</button>
+        <button class="button operator" onclick="appendOperator('+')">+</button>
+        <button class="button" onclick="appendNumber(4)">4</button>
+        <button class="button" onclick="appendNumber(5)">5</button>
+        <button class="button" onclick="appendNumber(6)">6</button>
+        <button class="button" onclick="calculate()">=</button>
+        <button class="button" onclick="appendNumber(1)">1</button>
+        <button class="button" onclick="appendNumber(2)">2</button>
+        <button class="button" onclick="appendNumber(3)">3</button>
+        <button class="button zero" onclick="appendNumber(0)">0</button>
+        <button class="button" onclick="appendDot()">.</button>
+      </div>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Press Count</th>
+          </tr>
+        </thead>
+        <tbody id="key-press-table">
+          <!-- Data will be populated here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    const display = document.getElementById('display');
+    let currentInput = '0';
+    let operator = null;
+    let previousInput = null;
+
+    function clearDisplay() {
+      currentInput = '0';
+      operator = null;
+      previousInput = null;
+      updateDisplay();
+    }
+
+    function appendNumber(number) {
+      if (currentInput === '0') {
+        currentInput = number.toString();
+      } else {
+        currentInput += number.toString();
+      }
+      updateDisplay();
+      recordButtonPress(number);
+    }
+
+    function appendOperator(op) {
+      if (operator !== null) {
+        calculate();
+      }
+      operator = op;
+      previousInput = currentInput;
+      currentInput = '0';
+    }
+
+    function appendDot() {
+      if (!currentInput.includes('.')) {
+        currentInput += '.';
+      }
+      updateDisplay();
+    }
+
+    function calculate() {
+      if (operator === null || previousInput === null) {
+        return;
+      }
+      const prev = parseFloat(previousInput);
+      const current = parseFloat(currentInput);
+      let result;
+      switch (operator) {
+        case '+':
+          result = prev + current;
+          break;
+        case '-':
+          result = prev - current;
+          break;
+        case '*':
+          result = prev * current;
+          break;
+        case '/':
+          result = prev / current;
+          break;
+        default:
+          return;
+      }
+      currentInput = result.toString();
+      operator = null;
+      previousInput = null;
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      display.textContent = currentInput;
+    }
+
+    function recordButtonPress(button) {
+      if (!isNaN(button)) {
+        fetch(`/numberPressed/${button}`)
+          .then(response => response.text())
+          .then(data => {
+            console.log(data);
+            fetchKeyPressData(); // Refresh the table data
+          })
+          .catch(error => console.error('Error:', error));
+      }
+    }
+
+    function fetchKeyPressData() {
+      fetch('/getNumbers')
+        .then(response => response.json())
+        .then(data => {
+          const tableBody = document.getElementById('key-press-table');
+          tableBody.innerHTML = '';
+          for (const [key, count] of Object.entries(data)) {
+            const row = document.createElement('tr');
+            const keyCell = document.createElement('td');
+            keyCell.textContent = key;
+            const countCell = document.createElement('td');
+            countCell.textContent = count;
+            row.appendChild(keyCell);
+            row.appendChild(countCell);
+            tableBody.appendChild(row);
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchKeyPressData);
+  </script>
+</body>
+</html>
