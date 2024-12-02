@@ -1,12 +1,13 @@
 import express from 'express';
 const filePath = './data.json';
 import indexRouter from './router/indexRouter.js';
-
-const app = express();
-app.use('/', indexRouter);
+import cors from 'cors';
 const port = 3000;
 
-app.use(express.static('public'));
+const app = express();
+
+app.use(cors());
+app.use('/', indexRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
