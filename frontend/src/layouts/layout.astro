@@ -5,7 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>calculator</title>
 </head>
-<body>
-    <slot/>
+<body>    
+    <nav>
+        <ul>
+            <li><a href="/"> Vannila Typescript/Javascript</a></li>
+            <li><a href="/react">React</a></li>
+            <li><a href="svelte">Svelte</a></li>
+        </ul>
+    </nav>
+    <div>
+        <slot/>
+    </div>
 </body>
 </html>
+
+<style>  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100vh;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+nav {
+    background-color: #333;
+    padding: 10px;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block;
+}
+
+nav ul li a:hover {
+    background-color: #575757;
+    border-radius: 4px;
+}
+  </style>
