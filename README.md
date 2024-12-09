@@ -10,7 +10,7 @@ cd backend
 npm install
 ```
 
-2. Copy the example data.json
+2. Copy the example data.json:
 ```sh
 cp data.example.json data.json
 ```
@@ -31,23 +31,15 @@ cd frontend
 ```sh
 npm install
 ```
+
 3. Copy the example environment file:
 ```sh
 cp .env.example .env
 ```
-3. Start the frontend development server:
+
+4. Start the frontend development server:
 ```sh
 npm run dev
 ```
 
-### Example Files
-
-- `backend/server.js`: The main backend server file.
-- `frontend/index.html`: The main frontend HTML file.
-- `frontend/js/app.js`: The main frontend JavaScript file.
-
-### Running the Application
-
-1. Ensure the backend server is running.
-2. Open the frontend in your browser by navigating to `http://localhost:3000`.
-3. Use the calculator interface to perform calculations.
+### Now simply access the calculator on the frontend URL, by default at http://localhost:4321

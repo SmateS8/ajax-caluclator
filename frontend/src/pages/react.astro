@@ -5,3 +5,93 @@ import Calculator from "../components/Calculator.jsx";
 <Layout>
     <Calculator client:load/>
 </Layout>
+
+<style is:global>
+    .calculator-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+}
+
+.calculator {
+    width: 320px;
+    min-width: 320px;
+    background-color: #FFFFFF;
+    border: 1px solid #D3D3D3;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    padding: 15px;
+}
+
+.display {
+    background-color: #252525;
+    color: #FFFFFF;
+    font-size: 36px;
+    text-align: right;
+    padding: 15px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    padding: 5px;
+}
+
+.buttons button {
+    width: 100%;
+    height: 50px;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.buttons button:hover {
+    background-color: #F0F0F0;
+}
+
+.buttons button:active {
+    background-color: #D6D6D6;
+}
+
+#equals {
+    background-color: #0078D7;
+    color: #FFFFFF;
+}
+
+#equals:hover {
+    background-color: #0062A7;
+}
+
+.statistics {
+    width: 180px;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    border: 1px solid #D3D3D3;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.statistics table {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
+.statistics h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+</style>
